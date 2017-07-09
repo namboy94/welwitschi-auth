@@ -1,0 +1,11 @@
+stages:
+  - test
+
+lint:
+  stage: test
+  tags:
+    - linux-buildserver
+  script:
+    - git clone https://github.com/PHPCheckstyle/phpcheckstyle.git
+    - cd phpcheckstyle
+    - php run.php --src ../src
