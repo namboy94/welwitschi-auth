@@ -33,7 +33,7 @@ class Authenticator {
 
 	/**
 	 * Authenticator constructor.
-	 * @param $db: The MySQL Database connection to use
+	 * @param mysqli $db: The MySQL Database connection to use
 	 */
 	public function __construct(mysqli $db) {
 		$this->db = $db;
@@ -62,5 +62,49 @@ class Authenticator {
 			"    UNIQUE KEY(username)," .
 			"    UNIQUE KEY(email));"
 		);
+	}
+
+	/**
+	 * Tries to retrieve a user from the database. If the user does not
+	 * exist, this method returns null.
+	 *
+	 * Since id, username and email are all unique, all method parameters
+	 * may also be null, only one is necessary for retrieving the user
+	 * information.
+	 *
+	 * @param int $id: The ID of the user in the database
+	 * @param string $username: The username of the user
+	 * @param string $email: The user's email address
+	 * @return User|null: The generated User object,
+	 *                    or null if no user was found
+	 */
+	public function getUser(int $id, string $username, string $email): User {
+
+		$stmt = $this->db->prepare(
+			"SELECT id, username, email, pw_hash, confirmation " .
+			"FROM accounts " .
+			"WHERE id=?" .
+			"OR username=?" .
+			"OR email=?;"
+		);
+
+		$stmt->bind_param("iss", $id, $username, $email);
+		$stmt->execute();
+		$result = $stmt->get_result();
+
+		if (!$result) { // SQL Error
+			return null;
+		} elseif ($result->num_rows !== 1) { // No result found
+			return null;
+		} else {
+			$values = $result->fetch_array(MYSQLI_ASSOC);
+			return new User(
+				$this->db,
+				$values["id"],
+				$values["username"],
+				$values["email"],
+				$values["pw_hash"],
+				$values["confirmation"]);
+		}
 	}
 }
