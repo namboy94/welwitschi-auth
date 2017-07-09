@@ -28,4 +28,4 @@ trigger_packagist_update:
   tags:
     - linux-buildserver
   script:
-    - curl -XPOST -H'content-type:application/json' 'https://packagist.org/api/update-package?username=$PACKAGIST_API_TOKEN&apiToken=API_TOKEN' -d'{"repository":{"url":"namboy94/welwitschi-auth"}}'
+    - curl -XPOST -H'content-type:application/json' 'https://packagist.org/api/update-package?username=$PACKAGIST_API_TOKEN&apiToken=API_TOKEN' -d'{"repository":{"url":"https://packagist.org/packages/namboy94/welwitschi-auth"}}'
