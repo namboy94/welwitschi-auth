@@ -21,6 +21,12 @@
 namespace welwitschi;
 
 
+/**
+ * Class Authenticator
+ * @package welwitschi
+ *
+ * This class offers convenience methods for accessing all authentication
+ * related-functionality
+ */
 class Authenticator {
-
 }
