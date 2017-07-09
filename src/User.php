@@ -52,7 +52,7 @@ class User {
 		$this->email = $email;
 		$this->pwHash = $pwHash;
 		$this->confirmed = $confirmation === "confirmed";
-		$this->confirmation_token = ($this->confirmed) ? null : $confirmation;
+		$this->confirmationToken = ($this->confirmed) ? null : $confirmation;
 	}
 
 	/**
@@ -61,7 +61,39 @@ class User {
 	 * @return string: The confirmation string
 	 */
 	public function getConfirmation(): string {
-		return ($this->confirmed) ? $this->confirmation_token : "confirmed";
+		return ($this->confirmed) ? $this->confirmationToken : "confirmed";
 	}
 
+	/**
+	 * Checks if a given password matches the user's password hash.
+	 * @param string $password: The password to check
+	 * @return bool: true if the password matches, false otherwise
+	 */
+	public function doesPasswordMatch(string $password) : bool {
+		return password_verify($password, $this->pwHash);
+	}
+
+	/**
+	 * Tries to confirm a user's account. This will succeed if the
+	 * provided confirmationToken is the same as the one in the database.
+	 * @param string $confirmationToken: The confirmationToken to use
+	 * @return bool: true if the confirmation was successful, false otherwise
+	 */
+	public function confirm(string $confirmationToken) : bool {
+		if ($confirmationToken === $this->confirmationToken) {
+
+			$this->confirmed = true;
+			$stmt = $this->db->prepare(
+				"UPDATE accounts " .
+				"SET confirmation='confirmed' " .
+				"WHERE id=?"
+			);
+			$stmt->bind_param("i", $this->id);
+			$stmt->execute();
+			$this->db->commit();
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

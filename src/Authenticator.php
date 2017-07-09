@@ -62,6 +62,41 @@ class Authenticator {
 			"    UNIQUE KEY(username)," .
 			"    UNIQUE KEY(email));"
 		);
+		$this->db->commit();
+	}
+
+	/**
+	 * Creates a new user
+	 * @param string $username: The user's username
+	 * @param string $email: The user's email address
+	 * @param string $password: The user's password
+	 * @return User: The newly generated user, or, in case the user already
+	 *               existed, the existing user
+	 */
+	public function createUser (
+		string $username, string $email, string $password) : User {
+		$existing = $this->getUser(null, $username, $email);
+
+		if ($existing === null) {
+			return $existing;
+		} else {
+
+			$pwHash = password_hash($password, PASSWORD_BCRYPT);
+			$confirmationToken = uniqid($username, true) . uniqid();
+
+			$stmt = $this->db->prepare(
+				"INSERT INTO accounts(" .
+				"    username, email, pw_hash, confirmation" .
+				") " .
+				"VALUES (?, ?, ?, ?)"
+			);
+			$stmt->bind_param("ssss",
+				$username, $email, $pwHash, $confirmationToken);
+			$stmt->execute();
+			$this->db->commit();
+
+			return $this->getUser(null, $username, $email);
+		}
 	}
 
 	/**
@@ -100,11 +135,11 @@ class Authenticator {
 			$values = $result->fetch_array(MYSQLI_ASSOC);
 			return new User(
 				$this->db,
-				$values["id"],
-				$values["username"],
-				$values["email"],
-				$values["pw_hash"],
-				$values["confirmation"]);
+				(int)$values["id"],
+				(string)$values["username"],
+				(string)$values["email"],
+				(string)$values["pw_hash"],
+				(string)$values["confirmation"]);
 		}
 	}
 }
