@@ -1,6 +1,7 @@
 stages:
   - mirror
   - test
+  - publish
 
 github_mirror:
   stage: mirror
@@ -21,3 +22,10 @@ lint:
   script:
     - cd .checkstyle
     - php run.php --src ../src
+
+trigger_packagist_update:
+  stage: publish
+  tags:
+    - linux-buildserver
+  script:
+    - curl -XPOST -H'content-type:application/json' 'https://packagist.org/api/update-package?username=$PACKAGIST_API_TOKEN&apiToken=API_TOKEN' -d'{"repository":{"url":"namboy94/welwitschi-auth"}}'
