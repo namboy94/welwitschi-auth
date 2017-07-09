@@ -1,0 +1,24 @@
+{
+  "name": "namboy94/welwitschi-auth",
+  "type": "library",
+  "description": "Authentication Library for PHP 7.1+",
+  "keywords": ["auth", "authentication"],
+  "homepage": "https://gitlab.namibsun.net/namboy94/welwitschi-auth",
+  "license": "GPLv3",
+  "authors": [
+    {
+      "name": "Hermann Krumrey",
+      "email": "hermann@krumreyh.com",
+      "homepage": "http://krumreyh.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=7.1.0"
+  },
+  "autoload": {
+    "psr-0": {
+      "Monolog": "src"
+    }
+  }
+}

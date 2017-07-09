@@ -66,19 +66,21 @@ class Authenticator {
 	}
 
 	/**
-	 * Creates a new user
+	 * Creates a new user, provided that user does not already exist or use
+	 * the same email address or username
 	 * @param string $username: The user's username
 	 * @param string $email: The user's email address
 	 * @param string $password: The user's password
-	 * @return User: The newly generated user, or, in case the user already
-	 *               existed, the existing user
+	 * @return bool: true if the creation of the User was successful,
+	 *               false if not
 	 */
 	public function createUser (
-		string $username, string $email, string $password) : User {
+		string $username, string $email, string $password) : bool {
+
 		$existing = $this->getUser(null, $username, $email);
 
 		if ($existing === null) {
-			return $existing;
+			return false;
 		} else {
 
 			$pwHash = password_hash($password, PASSWORD_BCRYPT);
@@ -95,7 +97,7 @@ class Authenticator {
 			$stmt->execute();
 			$this->db->commit();
 
-			return $this->getUser(null, $username, $email);
+			return true;
 		}
 	}
 
