@@ -39,7 +39,7 @@ class Reporters {
 
 	/**
 	 * this function called everytime a new file has been started for
-	 * checkstyle processing.
+	 * .checkstyle processing.
 	 *
 	 * @param $phpFile new
 	 *        	file's name

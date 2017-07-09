@@ -1,4 +1,4 @@
-<!-- somewhat inspired by java checkstyle -->
+<!-- somewhat inspired by j.checkstyletyle -->
 <phpcheckstyle-configuration>
 
 	<test name="phpException" level="error"/>
@@ -129,7 +129,7 @@
 	<!-- sl = same line -->
 	<!-- nl = new line -->
 	<test name="controlStructOpenCurly">
-		<property name="position" value="sl"/>
+		<property name="position" value="nl"/>
 	</test>
 
 	<!-- Check the position of the close curly brace  -->
@@ -139,14 +139,14 @@
 	<!-- sl = same line -->
 	<!-- nl = new line -->
 	<test name="funcDefinitionOpenCurly">
-		<property name="position" value="sl"/>
+		<property name="position" value="nl"/>
 	</test>
 
 	<!-- Check the position of the else -->
 	<!-- sl = same line -->
 	<!-- nl = new line -->
 	<test name="controlStructElse">
-		<property name="position" value="sl"/>
+		<property name="position" value="nl"/>
 	</test>
 
 	<!--  ****************  -->
@@ -252,6 +252,7 @@
 
 		<!-- <item value="T_INLINE_HTML"/> -->
 		<!-- <item value="T_ECHO"/>  -->
+
 	</test>
 	
 
@@ -310,7 +311,7 @@
 	<test name="switchNeedDefault"/>
 
 	<!-- Switch case should have a break -->
-	<!--  <test name="switchCaseNeedBreak"/> -->
+	<!--  <test name="switchCaseNeedBreak"/>  -->
 
 	<!-- Switch default value should be at the end -->
 	<test name="switchDefaultOrder"/>
@@ -339,6 +340,9 @@
 	
 	<!-- Avoid using variable variables -->
 	<test name="variableVariable" />
+	
+	<!-- $this cannot be used in a static function  -->
+	<test name="thisInStatic" level="error"/>
 
 	<!--  ****************  -->
 	<!--      Unused        -->
@@ -355,9 +359,6 @@
 
 	<!-- Detect unused code (after return or throw) -->
 	<test name="checkUnusedCode"/>
-	
-	<!-- $this cannot be used in a static function  -->
-	<test name="thisInStatic" level="error"/>
 
 	<!--  *******************  -->
 	<!--      Optimisation     -->
@@ -444,17 +445,6 @@
 		<alias old="show_source" new="highlight_file()"/>
 		<alias old="sizeof" new="count()"/>
 		<alias old="strchr" new="strstr()"/>
-	</test>
-
-	<!--  *********************************************  -->
-	<!--      Replacements for CodeIgniter framework     -->
-	<!--  *********************************************  -->
-
-	<!-- Replace  methods -->
-	<test name="checkReplacements">
-		<replacement old="$_POST" new="$this->input->post()"/>
-		<replacement old="$_GET" new="$this->input->get()"/>
-		<!-- <replacement old="$_SERVER" new="$this->input->server()"/>  -->
 	</test>
 
 </phpcheckstyle-configuration>

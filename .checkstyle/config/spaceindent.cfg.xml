@@ -1,4 +1,4 @@
-<!-- somewhat inspired by java checkstyle -->
+<!-- somewhat inspired by j.checkstyletyle -->
 <phpcheckstyle-configuration>
 
 	<test name="phpException" level="error"/>
@@ -121,7 +121,7 @@
 
 	<!-- Tests to make sure that a line does not contain the tab character. -->
 	<test name="indentation">  <!-- noTabs -->
-		<property name="type" value="tabs"/> <!-- tabs or spaces -->
+		<property name="type" value="spaces"/> <!-- tabs or spaces -->
 		<property name="number" value="4"/> <!-- number of spaces if type = spaces -->
 	</test>
 
@@ -129,7 +129,7 @@
 	<!-- sl = same line -->
 	<!-- nl = new line -->
 	<test name="controlStructOpenCurly">
-		<property name="position" value="nl"/>
+		<property name="position" value="sl"/>
 	</test>
 
 	<!-- Check the position of the close curly brace  -->
@@ -139,14 +139,14 @@
 	<!-- sl = same line -->
 	<!-- nl = new line -->
 	<test name="funcDefinitionOpenCurly">
-		<property name="position" value="nl"/>
+		<property name="position" value="sl"/>
 	</test>
 
 	<!-- Check the position of the else -->
 	<!-- sl = same line -->
 	<!-- nl = new line -->
 	<test name="controlStructElse">
-		<property name="position" value="nl"/>
+		<property name="position" value="sl"/>
 	</test>
 
 	<!--  ****************  -->
@@ -164,10 +164,13 @@
 	<test name="noSpaceAfterFunctionName" level="info"></test>
 
 	<!-- Check for the (required) presence of a white space after some tokens : "," "}" "-" -->
-	<test name="checkWhiteSpaceAfter"/>
+	<test name="checkWhiteSpaceAfter">
+		<exception value="."/>  <!-- Exceptions to this rule -->
+	</test>
 
 	<!-- Check for the (required) presence of a white space before some tokens : "{" "-" -->
 	<test name="checkWhiteSpaceBefore">
+		<exception value="."/>  <!-- Exceptions to this rule -->
 		<exception value=":"/>  <!-- Because of the switch/case -->
 	</test>
 
@@ -255,7 +258,7 @@
 
 	</test>
 	
-
+	
 	<!-- Check Prohibited Keywords -->
 	<test name="checkProhibitedKeywords" level="error">
 		<!-- <item value="FORBIDDEN"/> -->
@@ -340,9 +343,6 @@
 	
 	<!-- Avoid using variable variables -->
 	<test name="variableVariable" />
-	
-	<!-- $this cannot be used in a static function  -->
-	<test name="thisInStatic" level="error"/>
 
 	<!--  ****************  -->
 	<!--      Unused        -->
@@ -359,6 +359,9 @@
 
 	<!-- Detect unused code (after return or throw) -->
 	<test name="checkUnusedCode"/>
+	
+	<!-- $this cannot be used in a static function  -->
+	<test name="thisInStatic" level="error"/>
 
 	<!--  *******************  -->
 	<!--      Optimisation     -->

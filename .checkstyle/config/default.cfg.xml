@@ -1,4 +1,4 @@
-<!-- somewhat inspired by java checkstyle -->
+<!-- somewhat inspired by j.checkstyletyle -->
 <phpcheckstyle-configuration>
 
 	<test name="phpException" level="error" />

@@ -5,7 +5,7 @@ namespace PHPCheckstyle\Reporter;
  * Writes the errors into an xml file
  * Format:
  * ================================
- * <checkstyle>
+ * <.checkstyle>
  * <file name="file1">
  * <error line="M" column="1" severity="error" message="error message"/>
  * </file>
@@ -14,7 +14,7 @@ namespace PHPCheckstyle\Reporter;
  * <error line="Y" message="error message"/>
  * </file>
  * <file name="file3"/>
- * </checkstyle>
+ * </.checkstyle>
  * ================================
  *
  * @author Hari Kodungallur <hkodungallur@spikesource.com>

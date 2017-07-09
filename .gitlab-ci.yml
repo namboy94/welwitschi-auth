@@ -6,5 +6,5 @@ lint:
   tags:
     - linux-buildserver
   script:
-    - cd check
+    - cd .checkstyle
     - php run.php --src ../src

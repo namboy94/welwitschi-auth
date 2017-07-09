@@ -79,7 +79,7 @@ class XmlNCSSReporter {
 
 	/**
 	 *
-	 * @see Reporter::start create the document root (<checkstyle>)
+	 * @see Reporter::start create the document root (<.checkstyle>)
 	 *
 	 */
 	public function start() {

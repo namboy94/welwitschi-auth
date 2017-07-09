@@ -7,7 +7,7 @@ use DomDocument;
  *
  * Format:
  * ================================
- * <checkstyle>
+ * <.checkstyle>
  * <file name="file1">
  * <error line="M" column="1" severity="error" message="error message"/>
  * </file>
@@ -16,7 +16,7 @@ use DomDocument;
  * <error line="Y" message="error message"/>
  * </file>
  * <file name="file3"/>
- * </checkstyle>
+ * </.checkstyle>
  * ================================
  *
  * @author Hari Kodungallur <hkodungallur@spikesource.com>
@@ -43,7 +43,7 @@ class XmlFormatReporter extends Reporter {
 
 	/**
 	 *
-	 * @see Reporter::start create the document root (<checkstyle>)
+	 * @see Reporter::start create the document root (<.checkstyle>)
 	 *
 	 */
 	public function start() {
@@ -106,7 +106,7 @@ class XmlFormatReporter extends Reporter {
 	 */
 	protected function initXml() {
 		$this->document = new DomDocument("1.0");
-		$this->root = $this->document->createElement('checkstyle');
+		$this->root = $this->document->createElement('.checkstyle');
 		$this->root->setAttribute("version", "1.0.0");
 		$this->document->appendChild($this->root);
 	}

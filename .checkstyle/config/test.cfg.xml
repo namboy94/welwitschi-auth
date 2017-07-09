@@ -1,4 +1,4 @@
-<!-- somewhat inspired by java checkstyle -->
+<!-- somewhat inspired by j.checkstyletyle -->
 <phpcheckstyle-configuration>
 
 	<test name="phpException" level="error"/>
@@ -72,7 +72,7 @@
 	<!-- old = old style (constructor = name of the class) -->
 	<!-- new = "__construct()" -->
 	<test name="constructorNaming">
-		<property name="naming" value="old"/>
+		<property name="naming" value="new"/>
 	</test>
 
 	<!-- Check Class Naming -->
@@ -121,7 +121,7 @@
 
 	<!-- Tests to make sure that a line does not contain the tab character. -->
 	<test name="indentation">  <!-- noTabs -->
-		<property name="type" value="spaces"/> <!-- tabs or spaces -->
+		<property name="type" value="tabs"/> <!-- tabs or spaces -->
 		<property name="number" value="4"/> <!-- number of spaces if type = spaces -->
 	</test>
 
@@ -187,7 +187,7 @@
 	<!-- Check that the lenght of the line doesn't pass the max value -->
 	<test name="lineLength" level="info">
 		<property name="maxLineLength" value="160"/>
-		<property name="checkHTMLLines" value="false"/>
+		<property name="checkHTMLLines" value="true"/>
 	</test>
 
 	<!-- Checks that the lenght (in lines) of a function doesn't pass the max value -->
@@ -285,8 +285,9 @@
 		<exception value="chmod"/>
 	</test>
 
-	<!-- Check for encapsed variables inside a String ("$a") -->
+	<!-- Check for encapsed variables inside a String ("$a") DISABLED
 	<test name="encapsedVariablesInsideString"/>
+	-->
 
 	<!-- Avoid passing parameters by reference -->
 	<test name="avoidPassingReferences"/>
@@ -314,7 +315,7 @@
 	<test name="switchNeedDefault"/>
 
 	<!-- Switch case should have a break -->
-	<!--  <test name="switchCaseNeedBreak"/>  -->
+	<!--  <test name="switchCaseNeedBreak"> -->
 
 	<!-- Switch default value should be at the end -->
 	<test name="switchDefaultOrder"/>
@@ -337,7 +338,7 @@
 
 	<!-- Only one class declaration per PHP file -->
 	<test name="oneClassPerFile"/>
-
+	
 	<!-- Detect empty files -->
 	<test name="checkEmptyFile"/>
 	
@@ -359,9 +360,6 @@
 
 	<!-- Detect unused code (after return or throw) -->
 	<test name="checkUnusedCode"/>
-	
-	<!-- $this cannot be used in a static function  -->
-	<test name="thisInStatic" level="error"/>
 
 	<!--  *******************  -->
 	<!--      Optimisation     -->
