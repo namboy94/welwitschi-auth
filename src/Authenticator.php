@@ -19,6 +19,7 @@
  */
 
 namespace welwitschi;
+use mysqli;
 
 
 /**
@@ -29,4 +30,37 @@ namespace welwitschi;
  * related-functionality
  */
 class Authenticator {
+
+	/**
+	 * Authenticator constructor.
+	 * @param $db: The MySQL Database connection to use
+	 */
+	public function __construct(mysqli $db) {
+		$this->db = $db;
+		$this->createSchema();
+	}
+
+	/**
+	 * Creates the Account Database Table.
+	 * This method creates a table with the following properties:
+	 *
+	 * accounts:
+	 * | id | username | email | pw_hash | confirmation |
+	 *
+	 * The id, username and email are always unique. The confirmation
+	 * stores a confirmation token until the account was verified
+	 */
+	public function createSchema() {
+		$this->db->query(
+			"CREATE TABLE IF NOT EXISTS accounts (" .
+			"    id INTEGER NOT NULL," .
+			"    username VARCHAR(255) NOT NULL," .
+			"    email VARCHAR(255) NOT NULL," .
+			"    pw_hash VARCHAR(255) NOT NULL," .
+			"    confirmation VARCHAR(255) NOT NULL," .
+			"    PRIMARY KEY(id)," .
+			"    UNIQUE KEY(username)," .
+			"    UNIQUE KEY(email));"
+		);
+	}
 }
