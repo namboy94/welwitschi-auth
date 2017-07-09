@@ -6,6 +6,5 @@ lint:
   tags:
     - linux-buildserver
   script:
-    - git clone https://github.com/PHPCheckstyle/phpcheckstyle.git
-    - cd phpcheckstyle
+    - cd check
     - php run.php --src ../src
