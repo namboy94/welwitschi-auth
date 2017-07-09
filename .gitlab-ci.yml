@@ -3,6 +3,11 @@ stages:
   - test
   - publish
 
+variables:
+  GITHUB_OAUTH_TOKEN: "$GITHUB_ACCESS_TOKEN"
+  GITLAB_ACCESS_TOKEN: "$GITLAB_ACCESS_TOKEN"
+  COMPOSER_API_TOKEN: "$COMPOSER_API_TOKEN"
+
 github_mirror:
   stage: mirror
   tags:
@@ -28,4 +33,4 @@ trigger_packagist_update:
   tags:
     - linux-buildserver
   script:
-    - curl -XPOST -H'content-type:application/json' "https://packagist.org/api/update-package?username=namboy94&apiToken=".$PACKAGIST_API_TOKEN -d'{"repository":{"url":"https://packagist.org/packages/namboy94/welwitschi-auth"}}'
+    - curl -XPOST -H'content-type:application/json' "https://packagist.org/api/update-package?username=namboy94&apiToken="$PACKAGIST_API_TOKEN -d'{"repository":{"url":"https://packagist.org/packages/namboy94/welwitschi-auth"}}'
