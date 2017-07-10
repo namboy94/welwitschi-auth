@@ -83,6 +83,10 @@ class Authenticator {
 			return false;
 		} else {
 
+			// No XSS :)
+			$username = htmlspecialchars($username, ENT_QUOTES, 'UTF-8');
+			$email = htmlspecialchars($email, ENT_QUOTES, 'UTF-8');
+
 			$pwHash = password_hash($password, PASSWORD_BCRYPT);
 			$confirmationToken = uniqid($username, true) . uniqid();
 

@@ -28,6 +28,8 @@ use mysqli;
  *
  * A class that models a user in the database. It also offers
  * various methods to manipulate the user data.
+ *
+ * A user object should not exist if the user does not exist in the database
  */
 class User {
 
@@ -53,6 +55,20 @@ class User {
 		$this->pwHash = $pwHash;
 		$this->confirmed = $confirmation === "confirmed";
 		$this->confirmationToken = ($this->confirmed) ? null : $confirmation;
+	}
+
+	/**
+	 * @return string: The username with unescaped special HTML characters
+	 */
+	public function getRawUsername() : string {
+		return htmlspecialchars_decode($this->username);
+	}
+
+	/**
+	 * @return string: The email address with unescaped special HTML characters
+	 */
+	public function getRawEmailAddress() : string {
+		return htmlspecialchars_decode($this->email);
 	}
 
 	/**
@@ -92,6 +108,26 @@ class User {
 			$stmt->execute();
 			$this->db->commit();
 			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Checks if the user is logged in.
+	 * @return bool: true if the user is logged in, false otherwise
+	 */
+	public function isLoggedIn() : bool {
+		if (session_status() === PHP_SESSION_NONE) {
+			session_set_cookie_params(86400);
+			session_start();
+		}
+
+		$sessionManager = new SessionManager($this);
+
+		if (isset($_SESSION["login_token"])) {
+			$loginToken = $_SESSION["login_token"];
+			return $sessionManager->isValidLoginToken($loginToken);
 		} else {
 			return false;
 		}
