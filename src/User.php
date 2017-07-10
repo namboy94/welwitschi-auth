@@ -77,7 +77,7 @@ class User {
 	 * @return string: The confirmation string
 	 */
 	public function getConfirmation(): string {
-		return ($this->confirmed) ? $this->confirmationToken : "confirmed";
+		return ($this->confirmed) ? "confirmed" : $this->confirmationToken;
 	}
 
 	/**
