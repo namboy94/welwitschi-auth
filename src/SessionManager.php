@@ -76,4 +76,25 @@ class SessionManager {
 		$stmt->execute();
 		return $stmt->get_result()->fetch_array(MYSQLI_ASSOC);
 	}
+
+	/**
+	 * Logs the user in. Generates a new login session token and stores
+	 * the corresponding hash in the database
+	 * @return string: The generated token
+	 */
+	public function login() : string {
+		$token = uniqid($this->user->username, true) . uniqid();
+		$loginHash = password_hash($token, PASSWORD_BCRYPT);
+
+		$stmt = $this->db->prepare(
+			"INSERT INTO sessions (user_id, login_hash, api_hash) " .
+			"VALUES (?, ?, NULL) " .
+			"ON DUPLICATE KEY UPDATE login_hash=?;"
+		);
+		$stmt->bind_param("iiss",
+			$this->user->id, $this->user->id, $loginHash, $loginHash);
+		$stmt->execute();
+		$this->db->commit();
+		return $token;
+	}
 }

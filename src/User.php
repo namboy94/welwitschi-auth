@@ -55,6 +55,8 @@ class User {
 		$this->pwHash = $pwHash;
 		$this->confirmed = $confirmation === "confirmed";
 		$this->confirmationToken = ($this->confirmed) ? null : $confirmation;
+
+		$this->sessionManager = new SessionManager($this);
 	}
 
 	/**
@@ -114,20 +116,35 @@ class User {
 	}
 
 	/**
+	 * Attempts to perform a login with this user.
+	 * @param string $password: The password for this user,
+	 *                          required for authentication
+	 * @return bool: true if the user is logged in afterwards, false otherwise
+	 */
+	public function login(string $password) : bool {
+		if ($this->isLoggedIn()) {
+			return true;
+		} elseif ($this->doesPasswordMatch($password)) {
+			initializeSession();
+			$loginToken = $this->sessionManager->login();
+			$_SESSION["username"] = $this->username;
+			$_SESSION["login_token"] = $loginToken;
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
 	 * Checks if the user is logged in.
 	 * @return bool: true if the user is logged in, false otherwise
 	 */
 	public function isLoggedIn() : bool {
-		if (session_status() === PHP_SESSION_NONE) {
-			session_set_cookie_params(86400);
-			session_start();
-		}
-
-		$sessionManager = new SessionManager($this);
+		initializeSession();
 
 		if (isset($_SESSION["login_token"])) {
 			$loginToken = $_SESSION["login_token"];
-			return $sessionManager->isValidLoginToken($loginToken);
+			return $this->sessionManager->isValidLoginToken($loginToken);
 		} else {
 			return false;
 		}

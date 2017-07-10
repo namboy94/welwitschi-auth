@@ -81,8 +81,8 @@ class Authenticator {
 		$this->db->query(
 			"CREATE TABLE IF NOT EXISTS sessions (" .
 			"    user_id INTEGER NOT NULL," .
-			"    login_hash VARCHAR(255) NOT NULL," .
-			"    api_hash VARCHAR(255) NOT NULL," .
+			"    login_hash VARCHAR(255)," .
+			"    api_hash VARCHAR(255)," .
 			"    FOREIGN KEY(user_id) REFERENCES accounts(id));"
 		);
 		$this->db->commit();
