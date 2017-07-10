@@ -45,10 +45,16 @@ class SessionManager {
 	 * @return bool: true if the token is valid, false otherwise
 	 */
 	public function isValidLoginToken(string $loginToken) : bool {
-		return password_verify(
-			$loginToken,
-			$this->getTokenHashes()["login_hash"]
-		);
+		$hashes = $this->getTokenHashes();
+
+		if ($hashes === null) {
+			return false;
+		} else {
+			return password_verify(
+				$loginToken,
+				$this->getTokenHashes()["login_hash"]
+			);
+		}
 	}
 
 	/**
@@ -57,10 +63,16 @@ class SessionManager {
 	 * @return bool: true if the token is valid, false otherwise
 	 */
 	public function isValidApiToken(string $apiToken) : bool {
-		return password_verify(
-			$apiToken,
-			$this->getTokenHashes()["api_hash"]
-		);
+		$hashes = $this->getTokenHashes();
+
+		if ($hashes === null) {
+			return false;
+		} else {
+			return password_verify(
+				$apiToken,
+				$hashes["api_hash"]
+			);
+		}
 	}
 
 	/**
@@ -68,7 +80,7 @@ class SessionManager {
 	 * @return array: The token hashes in an associative array, with the
 	 *                keys `login_hash` and `api_hash`.
 	 */
-	public function getTokenHashes() : array {
+	public function getTokenHashes() : ? array {
 		$stmt = $this->db->prepare(
 			"SELECT login_hash, api_hash FROM sessions WHERE user_id=?"
 		);
@@ -91,8 +103,8 @@ class SessionManager {
 			"VALUES (?, ?, NULL) " .
 			"ON DUPLICATE KEY UPDATE login_hash=?;"
 		);
-		$stmt->bind_param("iiss",
-			$this->user->id, $this->user->id, $loginHash, $loginHash);
+		$stmt->bind_param("iss",
+			$this->user->id, $loginHash, $loginHash);
 		$stmt->execute();
 		$this->db->commit();
 		return $token;
