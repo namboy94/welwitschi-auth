@@ -37,7 +37,8 @@ class Authenticator {
 	 */
 	public function __construct(mysqli $db) {
 		$this->db = $db;
-		$this->createSchema();
+		$this->createAccountsTable();
+		$this->createSessionsTable();
 	}
 
 	/**
@@ -50,9 +51,8 @@ class Authenticator {
 	 * The id, username and email are always unique. The confirmation
 	 * stores a confirmation token until the account was verified
 	 */
-	public function createSchema() {
-
-		$result = $this->db->query(
+	public function createAccountsTable() {
+		$this->db->query(
 			"CREATE TABLE IF NOT EXISTS accounts (" .
 			"    id INTEGER NOT NULL," .
 			"    username VARCHAR(128) NOT NULL," .
@@ -63,11 +63,29 @@ class Authenticator {
 			"    UNIQUE KEY(username)," .
 			"    UNIQUE KEY(email));"
 		);
-		if ($result === false) {
-			return; // SQL Error, should not happen
-		} else {
-			$this->db->commit();
-		}
+		$this->db->commit();
+	}
+
+	/**
+	 * Creates the Sessions Database Table.
+	 * This method creates a table with the following properties:
+	 *
+	 * sessions:
+	 * | user_id | login_hash | api_hash |
+	 *
+	 * The user_id directly references a user in the accounts database.
+	 * The login_hash is used for normal session token hashes, the api_hash
+	 * is used to store the API token hash.
+	 */
+	public function createSessionsTable() {
+		$this->db->query(
+			"CREATE TABLE IF NOT EXISTS sessions (" .
+			"    user_id INTEGER NOT NULL," .
+			"    login_hash VARCHAR(255) NOT NULL," .
+			"    api_hash VARCHAR(255) NOT NULL," .
+			"    FOREIGN KEY(user_id) REFERENCES accounts(id));"
+		);
+		$this->db->commit();
 	}
 
 	/**
@@ -84,7 +102,7 @@ class Authenticator {
 
 		$existing = $this->getUser(-1, $username, $email);
 
-		if ($existing === null) {
+		if ($existing !== null) {
 			return false;
 		} else {
 

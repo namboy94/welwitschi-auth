@@ -40,28 +40,6 @@ class SessionManager {
 	}
 
 	/**
-	 * Creates the Sessions Database Table.
-	 * This method creates a table with the following properties:
-	 *
-	 * sessions:
-	 * | user_id | login_hash | api_hash |
-	 *
-	 * The user_id directly references a user in the accounts database.
-	 * The login_hash is used for normal session token hashes, the api_hash
-	 * is used to store the API token hash.
-	 */
-	public function createSchema() {
-		$this->db->query(
-			"CREATE TABLE IF NOT EXISTS sessions (" .
-			"    user_id INTEGER NOT NULL," .
-			"    login_hash VARCHAR(255) NOT NULL," .
-			"    api_hash VARCHAR(255) NOT NULL," .
-			"    FOREIGN KEY(user_id) REFERENCES accounts(id));"
-		);
-		$this->db->commit();
-	}
-
-	/**
 	 * Checks if a give login token is valid
 	 * @param string $loginToken: The token to check
 	 * @return bool: true if the token is valid, false otherwise
