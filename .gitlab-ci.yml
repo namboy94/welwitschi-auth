@@ -25,3 +25,10 @@ lint:
   script:
     - cd .checkstyle
     - php run.php --src ../src
+
+unittest:
+  stage: test
+  tags:
+    - linux-buildserver
+  script:
+    - composer update
