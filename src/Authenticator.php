@@ -51,18 +51,23 @@ class Authenticator {
 	 * stores a confirmation token until the account was verified
 	 */
 	public function createSchema() {
-		$this->db->query(
+
+		$result = $this->db->query(
 			"CREATE TABLE IF NOT EXISTS accounts (" .
 			"    id INTEGER NOT NULL," .
-			"    username VARCHAR(255) NOT NULL," .
-			"    email VARCHAR(255) NOT NULL," .
+			"    username VARCHAR(128) NOT NULL," .
+			"    email VARCHAR(128) NOT NULL," .
 			"    pw_hash VARCHAR(255) NOT NULL," .
 			"    confirmation VARCHAR(255) NOT NULL," .
 			"    PRIMARY KEY(id)," .
 			"    UNIQUE KEY(username)," .
 			"    UNIQUE KEY(email));"
 		);
-		$this->db->commit();
+		if ($result === false) {
+			return; // SQL Error, should not happen
+		} else {
+			$this->db->commit();
+		}
 	}
 
 	/**
@@ -77,7 +82,7 @@ class Authenticator {
 	public function createUser (
 		string $username, string $email, string $password) : bool {
 
-		$existing = $this->getUser(null, $username, $email);
+		$existing = $this->getUser(-1, $username, $email);
 
 		if ($existing === null) {
 			return false;
@@ -94,7 +99,7 @@ class Authenticator {
 				"INSERT INTO accounts(" .
 				"    username, email, pw_hash, confirmation" .
 				") " .
-				"VALUES (?, ?, ?, ?)"
+				"VALUES (?, ?, ?, ?);"
 			);
 			$stmt->bind_param("ssss",
 				$username, $email, $pwHash, $confirmationToken);
@@ -119,13 +124,13 @@ class Authenticator {
 	 * @return User|null: The generated User object,
 	 *                    or null if no user was found
 	 */
-	public function getUser(int $id, string $username, string $email): User {
+	public function getUser(int $id, string $username, string $email): ? User {
 
 		$stmt = $this->db->prepare(
 			"SELECT id, username, email, pw_hash, confirmation " .
 			"FROM accounts " .
-			"WHERE id=?" .
-			"OR username=?" .
+			"WHERE id=? " .
+			"OR username=? " .
 			"OR email=?;"
 		);
 
@@ -147,5 +152,35 @@ class Authenticator {
 				(string)$values["pw_hash"],
 				(string)$values["confirmation"]);
 		}
+	}
+
+	/**
+	 * Tries to retrieve a user using the user ID as the key
+	 * @param int $id: The user ID
+	 * @return null|User: The retrieved user object,
+	 *                    or null if no user was found
+	 */
+	public function getUserFromId(int $id) : ? User {
+		return $this->getUser($id, "", "");
+	}
+
+	/**
+	 * Tries to retrieve a user using the username as the key
+	 * @param string $username: The user's username
+	 * @return null|User: The retrieved user object,
+	 *                    or null if no user was found
+	 */
+	public function getUserFromUsername(string $username) : ? User {
+		return $this->getUser(-1, $username, "");
+	}
+
+	/**
+	 * Tries to retrieve a user using the user's email address as the key
+	 * @param string $emailAddress: The user's email address
+	 * @return null|User: The retrieved user object,
+	 *                    or null if no user was found
+	 */
+	public function getUserFromEmailAddress(string $emailAddress) : ? User {
+		return $this->getUser(-1, "", $emailAddress);
 	}
 }
