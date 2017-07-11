@@ -114,9 +114,16 @@ final class UserManagementTest extends TestCase {
 	public function testDeletingUser() {
 		$this->assertTrue($this->authenticator->createUser(
 			"Tester", "test@namibsun.net", "password"));
-		$user = $this->authenticator->getUserFromId(1);
+		$this->assertNotNull(
+			$user = $this->authenticator->getUserFromId(1));
+
+		$this->assertTrue($user->login("password"));
+		$this->assertNotNull($user->sessionManager->getTokenHashes());
+
 		$this->assertTrue($this->authenticator->deleteUser($user, "password"));
 		$this->assertNull($this->authenticator->getUserFromId(1));
+
+		$this->assertNull($user->sessionManager->getTokenHashes());
 	}
 
 	/**
