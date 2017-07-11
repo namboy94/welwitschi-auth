@@ -224,7 +224,7 @@ class User {
 		$newHash = password_hash($newPass, PASSWORD_BCRYPT);
 
 		$stmt = $this->db->prepare(
-			"UPDATE accounts SET pwHash=? WHERE user_id=?"
+			"UPDATE accounts SET pw_hash=? WHERE id=?;"
 		);
 		$stmt->bind_param("si", $newHash, $this->username);
 		$stmt->execute();

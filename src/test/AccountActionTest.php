@@ -8,16 +8,16 @@ use welwitschi\Authenticator;
 use welwitschi\User;
 
 /**
- * Class that tests logging in users
+ * Class that tests logging users in and out as well as password management
  * @property Authenticator authenticator: The authenticator to use
  * @property User userOne: The first user
  * @property User userTwo: The second user
  */
-final class LoginTest extends TestCase {
+final class AccountActionTest extends TestCase {
 
 	/**
 	 * Sets up the tests. Initializes a database connection and
-	 * Authenticator object as well as 3 new users.
+	 * Authenticator object as well as 2 new users.
 	 */
 	public function setUp() {
 		parent::setUp();
@@ -136,6 +136,17 @@ final class LoginTest extends TestCase {
 		$this->assertFalse($this->userOne->login("pass1"));
 		$this->assertTrue($this->userOne->login("newpass"));
 		$this->assertTrue($this->userOne->isLoggedIn());
+	}
+
+	/**
+	 * Tests resetting a password
+	 */
+	public function testResettingPassword() {
+		$this->assertTrue($this->userOne->login("pass1"));
+		$newPass = $this->userOne->resetPassword();
+		$this->assertFalse($this->userOne->isLoggedIn());
+		$this->assertFalse($this->userOne->doesPasswordMatch("pass1"));
+		$this->assertTrue($this->userOne->doesPasswordMatch($newPass));
 	}
 
 }
