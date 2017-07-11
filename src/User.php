@@ -183,4 +183,33 @@ class User {
 	public function verifyApiKey(string $apiKey) : bool {
 		return $this->sessionManager->isValidApiToken($apiKey);
 	}
+
+	/**
+	 * Changes a user's password
+	 * @param string $previous: The previous password, which is required
+	 *                          to match the currently stored password hash
+	 * @param string $new: The new password for which
+	 *                     a new has will be generated
+	 * @return bool: true if the password was changed successfully,
+	 *               false otherwise
+	 */
+	public function changePassword(string $previous, string $new) : bool {
+
+		if ($this->doesPasswordMatch($previous)) {
+
+			$hash = password_hash($new, PASSWORD_BCRYPT);
+
+			$stmt = $this->db->prepare(
+				"UPDATE accounts SET pw_hash=? WHERE id=?;"
+			);
+			$stmt->bind_param("is", $hash, $this->id);
+			$stmt->execute();
+			$this->db->commit();
+			$this->pwHash = $hash;
+			return $hash;
+
+		} else {
+			return null;
+		}
+	}
 }

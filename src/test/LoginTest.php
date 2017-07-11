@@ -122,4 +122,20 @@ final class LoginTest extends TestCase {
 		$this->assertTrue(isset($_SESSION["user_id"]));
 		$this->assertTrue(isset($_SESSION["login_token"]));
 	}
+
+	/**
+	 * Tests changing a password after logging in, then logging out
+	 * and making sure that the new password will be used
+	 */
+	public function testChangingPassword() {
+		$this->assertTrue($this->userOne->login("pass1"));
+		$this->assertTrue($this->userOne->changePassword("pass1", "newpass"));
+		$this->assertTrue($this->userOne->isLoggedIn());
+
+		$this->userOne->logout();
+		$this->assertFalse($this->userOne->login("pass1"));
+		$this->assertTrue($this->userOne->login("newpass"));
+		$this->assertTrue($this->userOne->isLoggedIn());
+	}
+
 }
