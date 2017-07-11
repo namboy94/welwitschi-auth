@@ -52,7 +52,7 @@ class SessionManager {
 		} else {
 			return password_verify(
 				$loginToken,
-				$this->getTokenHashes()["login_hash"]
+				$hashes["login_hash"]
 			);
 		}
 	}
@@ -107,6 +107,7 @@ class SessionManager {
 			$this->user->id, $loginHash, $loginHash);
 		$stmt->execute();
 		$this->db->commit();
+
 		return $token;
 	}
 
@@ -127,20 +128,5 @@ class SessionManager {
 			$this->user->id, $hash, $hash);
 		$stmt->execute();
 		$this->db->commit();
-	}
-
-	/**
-	 * Checks if a given API Key matches the hash in the database
-	 * @param string $apiKey: The key to check
-	 * @return bool: true if the key matches, false otherwise
-	 */
-	public function verifyApiKey(string $apiKey) : bool {
-		$hashes = $this->getTokenHashes();
-		if ($hashes === null) {
-			return false;
-		} else {
-			$hash = $hashes["api_hash"];
-			return password_verify($apiKey, $hash);
-		}
 	}
 }

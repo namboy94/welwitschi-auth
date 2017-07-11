@@ -60,8 +60,6 @@ class Authenticator {
 			"    pw_hash VARCHAR(255) NOT NULL," .
 			"    confirmation VARCHAR(255) NOT NULL," .
 			"    PRIMARY KEY(id, username, email));"
-			//"    UNIQUE KEY(username)," .
-			//"    UNIQUE KEY(email));"
 		);
 		$this->db->commit();
 	}
@@ -83,7 +81,10 @@ class Authenticator {
 			"    user_id INTEGER NOT NULL," .
 			"    login_hash VARCHAR(255)," .
 			"    api_hash VARCHAR(255)," .
-			"    FOREIGN KEY(user_id) REFERENCES accounts(id));"
+			"    PRIMARY KEY(user_id)," .
+			"    FOREIGN KEY(user_id) REFERENCES accounts(id)" .
+			"        ON DELETE CASCADE" .
+			"        ON UPDATE CASCADE);"
 		);
 		$this->db->commit();
 	}

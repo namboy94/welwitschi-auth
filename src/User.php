@@ -156,6 +156,11 @@ class User {
 		}
 	}
 
+	public function logout() {
+		unset($_SESSION["login_token"]);
+		unset($_SESSION["user_id"]);
+	}
+
 	/**
 	 * Generates a new API key and stores it in the database
 	 * @return string: The generated API key
@@ -172,6 +177,6 @@ class User {
 	 * @return bool: true if the API key is valid, false otherwise
 	 */
 	public function verifyApiKey(string $apiKey) : bool {
-		return $this->sessionManager->verifyApiKey($apiKey);
+		return $this->sessionManager->isValidApiToken($apiKey);
 	}
 }
