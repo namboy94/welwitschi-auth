@@ -10,16 +10,14 @@ use welwitschi\Authenticator;
  * Class that tests the database tables themselves
  * @property mysqli db: The database connection to use
  */
-final class DBTableTest extends TestCase
-{
+final class DBTableTest extends TestCase {
 
 	/**
 	 * Sets up the tests. Initializes a database connection and
 	 * deletes any tables that will be created when initializing an
 	 * Authenticator.
 	 */
-	public function setUp()
-	{
+	public function setUp() {
 		parent::setUp();
 		$this->db = new mysqli(
 			"localhost",
@@ -34,8 +32,7 @@ final class DBTableTest extends TestCase
 	/**
 	 * Deletes any tables created during testing
 	 */
-	public function tearDown()
-	{
+	public function tearDown() {
 		$this->db->query("DROP TABLE accounts;");
 		$this->db->query("DROP TABLE sessions;");
 		$this->db->commit();
@@ -47,8 +44,7 @@ final class DBTableTest extends TestCase
 	 * Tests initializing an Authenticator object, which creates
 	 * the 'sessions' and 'accounts' tables in the database
 	 */
-	public function testCreatingTables()
-	{
+	public function testCreatingTables() {
 		$this->assertFalse($this->db->query("SELECT * FROM accounts;"));
 		$this->assertFalse($this->db->query("SELECT * FROM sessions;"));
 		new Authenticator($this->db);
