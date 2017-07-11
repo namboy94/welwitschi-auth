@@ -21,6 +21,11 @@
 namespace welwitschi;
 use mysqli;
 
+if (session_status() === PHP_SESSION_NONE) {
+	session_set_cookie_params(86400);
+	session_start();
+}
+
 
 /**
  * Class User
@@ -125,9 +130,10 @@ class User {
 		if ($this->isLoggedIn()) {
 			return true;
 		} elseif ($this->doesPasswordMatch($password)) {
-			initializeSession();
+
+			// Requires a started session
 			$loginToken = $this->sessionManager->login();
-			$_SESSION["username"] = $this->username;
+			$_SESSION["user_id"] = $this->id;
 			$_SESSION["login_token"] = $loginToken;
 			return true;
 		} else {
@@ -140,8 +146,8 @@ class User {
 	 * @return bool: true if the user is logged in, false otherwise
 	 */
 	public function isLoggedIn() : bool {
-		initializeSession();
 
+		// Requires a started session
 		if (isset($_SESSION["login_token"])) {
 			$loginToken = $_SESSION["login_token"];
 			return $this->sessionManager->isValidLoginToken($loginToken);

@@ -54,14 +54,14 @@ class Authenticator {
 	public function createAccountsTable() {
 		$this->db->query(
 			"CREATE TABLE IF NOT EXISTS accounts (" .
-			"    id INTEGER NOT NULL," .
+			"    id INTEGER NOT NULL AUTO_INCREMENT," .
 			"    username VARCHAR(128) NOT NULL," .
 			"    email VARCHAR(128) NOT NULL," .
 			"    pw_hash VARCHAR(255) NOT NULL," .
 			"    confirmation VARCHAR(255) NOT NULL," .
-			"    PRIMARY KEY(id)," .
-			"    UNIQUE KEY(username)," .
-			"    UNIQUE KEY(email));"
+			"    PRIMARY KEY(id, username, email));"
+			//"    UNIQUE KEY(username)," .
+			//"    UNIQUE KEY(email));"
 		);
 		$this->db->commit();
 	}

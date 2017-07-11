@@ -84,7 +84,7 @@ class SessionManager {
 		$stmt = $this->db->prepare(
 			"SELECT login_hash, api_hash FROM sessions WHERE user_id=?"
 		);
-		$stmt->bind_param("s", $this->user->username);
+		$stmt->bind_param("i", $this->user->id);
 		$stmt->execute();
 		return $stmt->get_result()->fetch_array(MYSQLI_ASSOC);
 	}
