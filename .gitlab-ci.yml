@@ -32,3 +32,4 @@ unittest:
     - linux-buildserver
   script:
     - composer update
+    - vendor/bin/phpunit src/test

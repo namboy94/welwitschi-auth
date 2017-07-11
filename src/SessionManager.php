@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright Hermann Krumrey <hermann@krumreyh.com> 2017
  *
