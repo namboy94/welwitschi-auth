@@ -129,4 +129,14 @@ class SessionManager {
 		$stmt->execute();
 		$this->db->commit();
 	}
+
+	/**
+	 * Deletes the Login token hash from the database
+	 */
+	public function wipeLoginSession() {
+		$stmt = $this->db->prepare("DELETE FROM sessions WHERE user_id = ?;");
+		$stmt->bind_param("i", $this->user->id);
+		$stmt->execute();
+		$this->db->commit();
+	}
 }

@@ -167,6 +167,7 @@ class User {
 
 	/**
 	 * Generates a new API key and stores it in the database
+	 * Previous API keys will be overwritten
 	 * @return string: The generated API key
 	 */
 	public function generateNewApiKey() : string {
@@ -211,5 +212,26 @@ class User {
 		} else {
 			return null;
 		}
+	}
+
+	/**
+	 * Resets the password and sets it to a new randomized 20-character
+	 * long password.
+	 * @return string: The generated password
+	 */
+	public function resetPassword() : string {
+		$newPass = bin2hex(random_bytes(20));
+		$newHash = password_hash($newPass, PASSWORD_BCRYPT);
+
+		$stmt = $this->db->prepare(
+			"UPDATE accounts SET pwHash=? WHERE user_id=?"
+		);
+		$stmt->bind_param("si", $newHash, $this->username);
+		$stmt->execute();
+		$this->db->commit();
+		$this->pwHash = $newHash;
+
+		$this->sessionManager->wipeLoginSession();
+		return $newPass;
 	}
 }
