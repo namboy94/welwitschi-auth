@@ -111,7 +111,7 @@ class Authenticator {
 			$email = htmlspecialchars($email, ENT_QUOTES, 'UTF-8');
 
 			$pwHash = password_hash($password, PASSWORD_BCRYPT);
-			$confirmationToken = uniqid($username, true) . uniqid();
+			$confirmationToken = bin2hex(random_bytes(64));
 
 			$stmt = $this->db->prepare(
 				"INSERT INTO accounts(" .

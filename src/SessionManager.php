@@ -95,7 +95,7 @@ class SessionManager {
 	 * @return string: The generated token
 	 */
 	public function login() : string {
-		$token = uniqid($this->user->username, true) . uniqid();
+		$token = bin2hex(random_bytes(64));
 		$loginHash = password_hash($token, PASSWORD_BCRYPT);
 
 		$stmt = $this->db->prepare(
@@ -108,5 +108,39 @@ class SessionManager {
 		$stmt->execute();
 		$this->db->commit();
 		return $token;
+	}
+
+	/**
+	 * Stores a hash of a new API key in the database.
+	 * The previously stored hash will be deleted
+	 * @param string $apiKey: The API Key to set
+	 */
+	public function storeApiKey(string $apiKey) {
+		$hash = password_hash($apiKey, PASSWORD_BCRYPT);
+
+		$stmt = $this->db->prepare(
+			"INSERT INTO sessions (user_id, login_hash, api_hash) " .
+			"VALUES (?, NULL, ?) " .
+			"ON DUPLICATE KEY UPDATE api_hash=?;"
+		);
+		$stmt->bind_param("iss",
+			$this->user->id, $hash, $hash);
+		$stmt->execute();
+		$this->db->commit();
+	}
+
+	/**
+	 * Checks if a given API Key matches the hash in the database
+	 * @param string $apiKey: The key to check
+	 * @return bool: true if the key matches, false otherwise
+	 */
+	public function verifyApiKey(string $apiKey) : bool {
+		$hashes = $this->getTokenHashes();
+		if ($hashes === null) {
+			return false;
+		} else {
+			$hash = $hashes["api_hash"];
+			return password_verify($apiKey, $hash);
+		}
 	}
 }

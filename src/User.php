@@ -155,4 +155,23 @@ class User {
 			return false;
 		}
 	}
+
+	/**
+	 * Generates a new API key and stores it in the database
+	 * @return string: The generated API key
+	 */
+	public function generateNewApiKey() : string {
+		$apiKey = bin2hex(random_bytes(64));
+		$this->sessionManager->storeApiKey($apiKey);
+		return $apiKey;
+	}
+
+	/**
+	 * Checks if a given API key is valid for the user
+	 * @param string $apiKey: The API key to check
+	 * @return bool: true if the API key is valid, false otherwise
+	 */
+	public function verifyApiKey(string $apiKey) : bool {
+		return $this->sessionManager->verifyApiKey($apiKey);
+	}
 }
