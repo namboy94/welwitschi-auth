@@ -9,7 +9,6 @@ use welwitschi\User;
 
 /**
  * Class that tests logging in users
- * @property mysqli db: The database connection to use
  * @property Authenticator authenticator: The authenticator to use
  * @property User userOne: The first user
  * @property User userTwo: The second user
@@ -22,16 +21,16 @@ final class LoginTest extends TestCase {
 	 */
 	public function setUp() {
 		parent::setUp();
-		$this->db = new mysqli(
+		$db = new mysqli(
 			"localhost",
 			"phpunit",
 			getenv("TEST_DB_PASS"), // Uses environment variable
 			"welwitschi_auth_test");
-		$this->db->query("DROP TABLE accounts;");
-		$this->db->query("DROP TABLE sessions;");
-		$this->db->commit();
+		$db->query("DROP TABLE accounts;");
+		$db->query("DROP TABLE sessions;");
+		$db->commit();
 
-		$this->authenticator = new Authenticator($this->db);
+		$this->authenticator = new Authenticator($db);
 
 		$this->authenticator->createUser("userOne", "user@1.net", "pass1");
 		$this->authenticator->createUser("userTwo", "user@2.net", "pass2");
@@ -41,13 +40,13 @@ final class LoginTest extends TestCase {
 	}
 
 	/**
-	 * Deletes any data created during testing
+	 * Deletes any tables created during testing
 	 */
 	public function tearDown() {
-		$this->db->query("DROP TABLE accounts;");
-		$this->db->query("DROP TABLE sessions;");
-		$this->db->commit();
-		$this->db->close();
+		$this->authenticator->db->query("DROP TABLE accounts;");
+		$this->authenticator->db->query("DROP TABLE sessions;");
+		$this->authenticator->db->commit();
+		$this->authenticator->db->close();
 		parent::tearDown();
 	}
 

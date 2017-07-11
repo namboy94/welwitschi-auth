@@ -156,6 +156,10 @@ class User {
 		}
 	}
 
+	/**
+	 * Unsets the session variables that contain the login token and user ID.
+	 * This effectively logs the user out.
+	 */
 	public function logout() {
 		unset($_SESSION["login_token"]);
 		unset($_SESSION["user_id"]);

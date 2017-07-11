@@ -202,4 +202,26 @@ class Authenticator {
 	public function getUserFromEmailAddress(string $emailAddress) : ? User {
 		return $this->getUser(-1, "", $emailAddress);
 	}
+
+	/**
+	 * Deletes a user from the database completely
+	 * @param User $user: The user object whose associated user will be deleted
+	 * @param string $password: The user's password for authentication purposes
+	 * @return bool: true if the action succeeded, false otherwise
+	 */
+	public function deleteUser(User $user, string $password) : bool {
+		if ($user->doesPasswordMatch($password)) {
+			$stmt = $this->db->prepare(
+				"DELETE FROM accounts " .
+				"WHERE id=? AND username=? AND email=?;"
+			);
+			$stmt->bind_param("iss",
+				$user->id, $user->username, $user->email);
+			$stmt->execute();
+			$this->db->commit();
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
