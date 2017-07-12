@@ -37,6 +37,12 @@ final class AccountActionTest extends TestCase {
 
 		$this->userOne = $this->authenticator->getUserFromUsername("userOne");
 		$this->userTwo = $this->authenticator->getUserFromUsername("userTwo");
+
+		// Confirm users to enable logging in
+		$confirmationOne = $this->userOne->getConfirmation();
+		$confirmationTwo = $this->userTwo->getConfirmation();
+		$this->assertTrue($this->userOne->confirm($confirmationOne));
+		$this->assertTrue($this->userTwo->confirm($confirmationTwo));
 	}
 
 	/**
@@ -125,11 +131,20 @@ final class AccountActionTest extends TestCase {
 
 	/**
 	 * Tests changing a password after logging in, then logging out
-	 * and making sure that the new password will be used
+	 * and making sure that the new password will be used.
+	 * Also checks that wrong original passwords are rejected
 	 */
 	public function testChangingPassword() {
 		$this->assertTrue($this->userOne->login("pass1"));
+
+		// With wrong credentials
+		$this->assertFalse($this->userOne->changePassword("aaa", "newpass"));
+		$this->assertFalse($this->userOne->doesPasswordMatch("newpass"));
+		$this->assertTrue($this->userOne->doesPasswordMatch("pass1"));
+
+		// With correct credentials
 		$this->assertTrue($this->userOne->changePassword("pass1", "newpass"));
+		$this->assertTrue($this->userOne->doesPasswordMatch("newpass"));
 		$this->assertTrue($this->userOne->isLoggedIn());
 
 		$this->userOne->logout();
@@ -147,6 +162,26 @@ final class AccountActionTest extends TestCase {
 		$this->assertFalse($this->userOne->isLoggedIn());
 		$this->assertFalse($this->userOne->doesPasswordMatch("pass1"));
 		$this->assertTrue($this->userOne->doesPasswordMatch($newPass));
+	}
+
+	/**
+	 * Tests if confirming a user account works as well as unconfirmed
+	 * accounts are unable to log in.
+	 */
+	public function testConfirmingAccountWhileTryingToLogin() {
+
+		$this->assertTrue($this->authenticator->createUser("3", "3", "3"));
+		$user = $this->authenticator->getUserFromId(3);
+
+		$this->assertFalse($user->login("3"));
+
+		$this->assertFalse($user->confirm("Nonsense"));
+		$this->assertFalse($user->login("3"));
+
+		$confirmation = $user->getConfirmation();
+		$this->assertTrue($user->confirm($confirmation));
+		$this->assertTrue($user->login("3"));
+
 	}
 
 }

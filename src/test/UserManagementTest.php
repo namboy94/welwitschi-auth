@@ -116,6 +116,7 @@ final class UserManagementTest extends TestCase {
 			"Tester", "test@namibsun.net", "password"));
 		$this->assertNotNull(
 			$user = $this->authenticator->getUserFromId(1));
+		$user->confirm($user->confirmationToken);
 
 		$this->assertTrue($user->login("password"));
 		$this->assertNotNull($user->sessionManager->getTokenHashes());
@@ -138,6 +139,9 @@ final class UserManagementTest extends TestCase {
 		$this->assertNotNull($this->authenticator->getUserFromId(1));
 	}
 
+	/**
+	 * Tests the getUser methods of the Authenticator class
+	 */
 	public function testGettingUsers() {
 		$this->assertTrue($this->authenticator->createUser("1a", "1b", "1c"));
 		$this->assertTrue($this->authenticator->createUser("2a", "2b", "2c"));

@@ -114,6 +114,8 @@ class User {
 			$stmt->bind_param("i", $this->id);
 			$stmt->execute();
 			$this->db->commit();
+			$this->confirmed = true;
+			$this->confirmationToken = "";
 			return true;
 		} else {
 			return false;
@@ -121,13 +123,16 @@ class User {
 	}
 
 	/**
-	 * Attempts to perform a login with this user.
+	 * Attempts to perform a login with this user. The user account
+	 * must be confirmed before logging in
 	 * @param string $password: The password for this user,
 	 *                          required for authentication
 	 * @return bool: true if the user is logged in afterwards, false otherwise
 	 */
 	public function login(string $password) : bool {
-		if ($this->isLoggedIn()) {
+		if (!$this->confirmed) {
+			return false;
+		} elseif ($this->isLoggedIn()) {
 			return true;
 		} elseif ($this->doesPasswordMatch($password)) {
 
@@ -207,10 +212,10 @@ class User {
 			$stmt->execute();
 			$this->db->commit();
 			$this->pwHash = $hash;
-			return $hash;
+			return true;
 
 		} else {
-			return null;
+			return false;
 		}
 	}
 

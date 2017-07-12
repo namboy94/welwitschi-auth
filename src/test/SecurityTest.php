@@ -72,4 +72,18 @@ final class SecurityTest extends TestCase {
 			->fetch_array()["pw_hash"];
 		$this->assertNotEquals("1", $pwHashFromDb);
 	}
+
+	/**
+	 * Tests that the user's username and email address are properly sanitized
+	 */
+	public function testXssInUserInfo() {
+		$this->assertTrue($this->authenticator->createUser(
+			"<script></script>", "<b>BOLD</b>", "1")
+		);
+		$user = $this->authenticator->getUserFromId(1);
+		$this->assertNotEquals($user->username, "<script></script>");
+		$this->assertEquals($user->getRawUsername(), "<script></script>");
+		$this->assertNotEquals($user->email, "<b>BOLD</b>");
+		$this->assertEquals($user->getRawEmailAddress(), "<b>BOLD</b>");
+	}
 }
