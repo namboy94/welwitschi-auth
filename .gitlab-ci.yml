@@ -1,6 +1,7 @@
 stages:
   - mirror
   - test
+  - release
   - docstats
   - finalize
 
