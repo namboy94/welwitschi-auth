@@ -1,7 +1,7 @@
 <!-- somewhat inspired by j.checkstyletyle -->
 <phpcheckstyle-configuration>
 
-	<test name="phpException" level="error" />
+	<test name="phpException" level="info" />
 
 	<!-- ********************************************************* -->
 	<!-- These functions are not tested for naming -->
@@ -214,7 +214,7 @@
 
 	<!-- Check that the lenght of the line doesn't pass the max value -->
 	<test name="lineLength" level="info">
-		<property name="maxLineLength" value="160" />
+		<property name="maxLineLength" value="80" />
 		<property name="checkHTMLLines" value="false" />
 	</test>
 
