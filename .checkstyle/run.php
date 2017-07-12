@@ -222,7 +222,9 @@ if (!$options['quiet']) {
 
 }
 
-if ($errorCounts[WARNING] > 0 or $errorCounts[ERROR] > 0) {
+if ($errorCounts[WARNING] > 0 or
+    $errorCounts[ERROR] > 0 or
+    $errorCounts[INFO] > 0) {
     exit(1);
 }
 else {

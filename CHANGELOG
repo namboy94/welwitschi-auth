@@ -1,3 +1,6 @@
+V 1.0.1:
+  - Enabed autoloader for composer
+  - Restructured tests
 V 1.0.0:
   - Implemented Base Functionality
   - Unit Testing
