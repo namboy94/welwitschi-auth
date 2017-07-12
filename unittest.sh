@@ -6,4 +6,4 @@ if [ -z "$TEST_DB_PASS" ]; then
 fi
 
 composer update
-vendor/bin/phpunit src/test
+vendor/bin/phpunit src/test --coverage-html=coverage

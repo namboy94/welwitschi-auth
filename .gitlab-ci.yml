@@ -1,6 +1,8 @@
 stages:
   - mirror
   - test
+  - docstats
+  - finalize
 
 variables:
   GITHUB_OAUTH_TOKEN: "$GITHUB_ACCESS_TOKEN"
@@ -24,11 +26,43 @@ lint:
   tags:
     - linux-buildserver
   script:
-    - ./lint.sh
+    - cd .checkstyle
+    - php run.php --src ../src
+    - cd ..
 
 unittest:
   stage: test
   tags:
     - linux-buildserver
   script:
-    - ./unittest.sh
+    - composer update
+    - vendor/bin/phpunit src/test --coverage-html=coverage
+    - rsync -av coverage/ /var/www/coverage.namibsun.net/public_html/welwitschi-auth --delete-before
+    
+gitstats:
+  stage: docstats
+  only:
+    - master
+    - develop
+  tags:
+    - linux-buildserver
+  script:
+    - gitstats . gitstats
+    - rsync -av gitstats/ /var/www/gitstats.namibsun.net/public_html/gitstats/welwitschi-auth --delete-before
+    - git_stats generate
+    - rsync -av git_stats/ /var/www/gitstats.namibsun.net/public_html/git_stats/welwitschi-auth --delete-before
+
+update_html_pages:
+  stage: finalize
+  when: always
+  tags:
+    - linux-buildserver
+  script:
+    - git clone https://gitlab.namibsun.net/namboy94/html-index-generator.git
+    - cd html-index-generator
+    - python html-index-generator.py /var/www/coverage.namibsun.net/public_html
+      /var/www/coverage.namibsun.net/public_html/index.html
+    - python html-index-generator.py /var/www/docs.namibsun.net/public_html
+      /var/www/docs.namibsun.net/public_html/index.html
+    - python html-index-generator.py /var/www/gitstats.namibsun.net/public_html
+      /var/www/gitstats.namibsun.net/public_html/index.html
