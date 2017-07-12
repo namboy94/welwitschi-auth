@@ -50,10 +50,7 @@ class SessionManager {
 		if ($hashes === null) {
 			return false;
 		} else {
-			return password_verify(
-				$loginToken,
-				$hashes["login_hash"]
-			);
+			return password_verify($loginToken, $hashes["login_hash"]);
 		}
 	}
 
@@ -68,10 +65,7 @@ class SessionManager {
 		if ($hashes === null) {
 			return false;
 		} else {
-			return password_verify(
-				$apiToken,
-				$hashes["api_hash"]
-			);
+			return password_verify($apiToken, $hashes["api_hash"]);
 		}
 	}
 

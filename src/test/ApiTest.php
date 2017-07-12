@@ -52,9 +52,13 @@ final class ApiTest extends TestCase {
 	 * a confirmed user. Also checks if API key verification works as well.
 	 */
 	public function testApiKeyGeneration() {
+		$this->assertFalse($this->user->verifyApiKey("No Key"));
+
 		$this->assertNull($this->user->generateNewApiKey());
 		$this->user->confirm($this->user->confirmationToken);
 		$apiKey = $this->user->generateNewApiKey();
+
+		$this->assertFalse($this->user->verifyApiKey("Wrong Key"));
 		$this->assertTrue($this->user->verifyApiKey($apiKey));
 	}
 }
