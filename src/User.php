@@ -176,7 +176,7 @@ class User {
 	 * @return string: The generated API key.
 	 *                 null if the user is not confirmed yet
 	 */
-	public function generateNewApiKey() : ?string {
+	public function generateNewApiKey() : ? string {
 
 		if ($this->confirmed) {
 			$apiKey = bin2hex(random_bytes(64));
