@@ -1,9 +1,6 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-require_once __DIR__ . "/../SessionManager.php";
-require_once __DIR__ . "/../Authenticator.php";
-require_once __DIR__ . "/../User.php";
 use welwitschi\Authenticator;
 use welwitschi\User;
 
