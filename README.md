@@ -1,5 +1,11 @@
 # Welwitschi-Auth
 
+|master|develop|
+|:----:|:-----:|
+|[![build status](https://gitlab.namibsun.net/namboy94/welwitschi-auth/badges/master/build.svg)](https://gitlab.namibsun.net/namboy94/welwitschi-auth/commits/master)|[![build status](https://gitlab.namibsun.net/namboy94/welwitschi-auth/badges/develop/build.svg)](https://gitlab.namibsun.net/namboy94/welwitschi-auth/commits/develop)|
+
+![Logo](resources/logo/logo.png)
+
 Welwitschi-Auth is an authentication library for use in websites written in
 PHP. It offers an object-oriented abstraction over rows stored in a
 MySQL/MariaDB database.
