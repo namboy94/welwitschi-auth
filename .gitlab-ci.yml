@@ -17,9 +17,9 @@ github_mirror:
     - git checkout master
     - git pull
     - git push git@github.com:namboy94/welwitschi-auth.git master -f
-    #- git checkout develop
-    #- git pull
-    #- git push git@github.com:namboy94/welwitschi-auth.git develop -f
+    - git checkout develop
+    - git pull
+    - git push git@github.com:namboy94/welwitschi-auth.git develop -f
 
 lint:
   stage: test
