@@ -41,6 +41,11 @@ You can use welwitschi-auth by adding the requirement
 to your `composer.json` file an then running `composer install`. You can then
 find the classes in `vendor/namboy94/welwitschi-auth/src`.
 
+## Documentation
+
+All classes and methods are documented using DocBlock comments. Additional
+Documentation can be found in [doc](doc/).
+
 ## Further Information
 
 * [Changelog](https://gitlab.namibsun.net/namboy94/welwitschi-auth/raw/master/CHANGELOG)
