@@ -5,5 +5,5 @@ if [ -z "$TEST_DB_PASS" ]; then
     exit 1
 fi
 
-composer update
 vendor/bin/phpunit src/test --coverage-html=coverage
+firefox coverage/index.html

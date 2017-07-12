@@ -157,9 +157,7 @@ class Authenticator {
 		$stmt->execute();
 		$result = $stmt->get_result();
 
-		if (!$result) { // SQL Error
-			return null;
-		} elseif ($result->num_rows !== 1) { // No result found
+		if ($result->num_rows !== 1) { // No result found
 			return null;
 		} else {
 			$values = $result->fetch_array(MYSQLI_ASSOC);

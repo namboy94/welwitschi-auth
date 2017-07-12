@@ -137,4 +137,26 @@ final class UserManagementTest extends TestCase {
 		$this->assertFalse($this->authenticator->deleteUser($user, "pass"));
 		$this->assertNotNull($this->authenticator->getUserFromId(1));
 	}
+
+	public function testGettingUsers() {
+		$this->assertTrue($this->authenticator->createUser("1a", "1b", "1c"));
+		$this->assertTrue($this->authenticator->createUser("2a", "2b", "2c"));
+
+		$oneOne = $this->authenticator->getUserFromId(1);
+		$oneTwo = $this->authenticator->getUserFromUsername("1a");
+		$oneThree = $this->authenticator->getUserFromEmailAddress("1b");
+		$oneFour = $this->authenticator->getUser(1, "", "");
+		$oneFive = $this->authenticator->getUser(-1, "1a", "");
+		$oneSix = $this->authenticator->getUser(-1, "", "1b");
+
+		$this->assertEquals($oneOne, $oneTwo);
+		$this->assertEquals($oneTwo, $oneThree);
+		$this->assertEquals($oneThree, $oneFour);
+		$this->assertEquals($oneFour, $oneFive);
+		$this->assertEquals($oneFive, $oneSix);
+		$this->assertEquals($oneSix, $oneOne);
+
+		$two = $this->authenticator->getUserFromId(2);
+		$this->assertNotEquals($oneOne, $two);
+	}
 }
