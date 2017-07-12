@@ -173,12 +173,19 @@ class User {
 	/**
 	 * Generates a new API key and stores it in the database
 	 * Previous API keys will be overwritten
-	 * @return string: The generated API key
+	 * @return string: The generated API key.
+	 *                 null if the user is not confirmed yet
 	 */
-	public function generateNewApiKey() : string {
-		$apiKey = bin2hex(random_bytes(64));
-		$this->sessionManager->storeApiKey($apiKey);
-		return $apiKey;
+	public function generateNewApiKey() : ?string {
+
+		if ($this->confirmed) {
+			$apiKey = bin2hex(random_bytes(64));
+			$this->sessionManager->storeApiKey($apiKey);
+			return $apiKey;
+		} else {
+			return null;
+		}
+
 	}
 
 	/**
