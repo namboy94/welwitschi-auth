@@ -222,4 +222,17 @@ class Authenticator {
 			return false;
 		}
 	}
+
+	/**
+	 * Retrieves all users from the database
+	 * @return array: An associative array of User objects with IDs as keys
+	 */
+	public function getAllUsers() : array {
+		$result = $this->db->query("SELECT id FROM accounts;");
+		$users = [];
+		foreach ($result->fetch_all(MYSQLI_ASSOC) as $user) {
+			$users[(int)$user["id"]] = $this->getUserFromId((int)$user["id"]);
+		}
+		return $users;
+	}
 }
