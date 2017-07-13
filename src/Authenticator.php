@@ -98,7 +98,7 @@ class Authenticator {
 	 * @return bool: true if the creation of the User was successful,
 	 *               false if not
 	 */
-	public function createUser (
+	public function createUser(
 		string $username, string $email, string $password) : bool {
 
 		$existing = $this->getUser(-1, $username, $email);
