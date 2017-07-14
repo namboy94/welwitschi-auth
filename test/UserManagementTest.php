@@ -160,4 +160,18 @@ final class UserManagementTest extends TestCase {
 		$two = $this->authenticator->getUserFromId(2);
 		$this->assertNotEquals($oneOne, $two);
 	}
+
+	/**
+	 * Tests fetching all users from the database
+	 */
+	public function testGettingAllUsers() {
+		$this->assertTrue($this->authenticator->createUser("1a", "1b", "1c"));
+		$this->assertTrue($this->authenticator->createUser("2a", "2b", "2c"));
+		$this->assertTrue($this->authenticator->createUser("3a", "3b", "3c"));
+
+		$users = $this->authenticator->getAllUsers();
+		$this->assertEquals(3, count($users));
+		$this->assertEquals($users[1]->name, "1a");
+
+	}
 }

@@ -1,3 +1,5 @@
+V 1.1.0:
+  - Add method to fetch all users
 V 1.0.1:
   - Enabed autoloader for composer
   - Restructured tests

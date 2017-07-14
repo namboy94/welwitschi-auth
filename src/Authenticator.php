@@ -98,7 +98,7 @@ class Authenticator {
 	 * @return bool: true if the creation of the User was successful,
 	 *               false if not
 	 */
-	public function createUser (
+	public function createUser(
 		string $username, string $email, string $password) : bool {
 
 		$existing = $this->getUser(-1, $username, $email);
@@ -221,5 +221,18 @@ class Authenticator {
 		} else {
 			return false;
 		}
+	}
+
+	/**
+	 * Retrieves all users from the database
+	 * @return array: An associative array of User objects with IDs as keys
+	 */
+	public function getAllUsers() : array {
+		$result = $this->db->query("SELECT id FROM accounts;");
+		$users = [];
+		foreach ($result->fetch_all(MYSQLI_ASSOC) as $user) {
+			$users[(int)$user["id"]] = $this->getUserFromId((int)$user["id"]);
+		}
+		return $users;
 	}
 }
