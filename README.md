@@ -39,7 +39,8 @@ You can use welwitschi-auth by adding the requirement
     "namboy94/welwitschi-auth": "dev-master"
     
 to your `composer.json` file an then running `composer install`. You can then
-find the classes in `vendor/namboy94/welwitschi-auth/src`.
+find the classes in `vendor/namboy94/welwitschi-auth/src`. Thanks to
+autoloader, you should be able to easily access the classes from cheetah-bets.
 
 ## Documentation
 
