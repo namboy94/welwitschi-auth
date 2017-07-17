@@ -151,14 +151,24 @@ final class AccountActionTest extends TestCase {
 	}
 
 	/**
-	 * Tests resetting a password
+	 * Tests resetting a password while logged in
 	 */
 	public function testResettingPassword() {
+
+		$originalHash = $this->userOne->pwHash;
+
 		$this->assertTrue($this->userOne->login("pass1"));
 		$newPass = $this->userOne->resetPassword();
 		$this->assertFalse($this->userOne->isLoggedIn());
 		$this->assertFalse($this->userOne->doesPasswordMatch("pass1"));
 		$this->assertTrue($this->userOne->doesPasswordMatch($newPass));
+		$dbPwHash = $this->authenticator->db->query(
+			"SELECT pw_hash FROM accounts " .
+			"WHERE id = " . $this->userOne->id)
+			->fetch_array(MYSQLI_ASSOC)["pw_hash"];
+
+		$this->assertNotEquals($originalHash, $dbPwHash);
+		$this->assertEquals($dbPwHash, $this->userOne->pwHash);
 	}
 
 	/**

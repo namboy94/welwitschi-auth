@@ -233,7 +233,7 @@ class User {
 		$stmt = $this->db->prepare(
 			"UPDATE accounts SET pw_hash=? WHERE id=?;"
 		);
-		$stmt->bind_param("si", $newHash, $this->username);
+		$stmt->bind_param("si", $newHash, $this->id);
 		$stmt->execute();
 		$this->db->commit();
 		$this->pwHash = $newHash;
