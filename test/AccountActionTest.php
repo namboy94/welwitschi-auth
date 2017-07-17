@@ -132,6 +132,8 @@ final class AccountActionTest extends TestCase {
 	 * Also checks that wrong original passwords are rejected
 	 */
 	public function testChangingPassword() {
+		$originalHash = $this->userOne->pwHash;
+
 		$this->assertTrue($this->userOne->login("pass1"));
 
 		// With wrong credentials
@@ -148,6 +150,14 @@ final class AccountActionTest extends TestCase {
 		$this->assertFalse($this->userOne->login("pass1"));
 		$this->assertTrue($this->userOne->login("newpass"));
 		$this->assertTrue($this->userOne->isLoggedIn());
+
+		$dbPwHash = $this->authenticator->db->query(
+			"SELECT pw_hash FROM accounts " .
+			"WHERE id = " . $this->userOne->id)
+			->fetch_array(MYSQLI_ASSOC)["pw_hash"];
+
+		$this->assertNotEquals($originalHash, $dbPwHash);
+		$this->assertEquals($dbPwHash, $this->userOne->pwHash);
 	}
 
 	/**
