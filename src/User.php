@@ -270,4 +270,33 @@ class User {
 			return false;
 		}
 	}
+
+	/**
+	 * Changes the email address of a user
+	 * @param string $newEmail: The new email address
+	 * @return bool: true if the change went through, false otherwise
+	 */
+	public function changeEmail(string $newEmail) : bool {
+
+		if ($this->isLoggedIn()) {
+
+			$auth = new Authenticator($this->db);
+			if ($auth->getUserFromEmailAddress($newEmail) === null) {
+
+				$stmt = $this->db->prepare(
+					"UPDATE accounts SET email=? WHERE id=?;"
+				);
+				$stmt->bind_param("si", $newEmail, $this->id);
+				$stmt->execute();
+				$this->db->commit();
+				$this->email = $newEmail;
+				return true;
+			} else {
+				return false;
+			}
+
+		} else {
+			return false;
+		}
+	}
 }
