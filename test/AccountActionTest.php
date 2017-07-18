@@ -173,8 +173,7 @@ final class AccountActionTest extends TestCase {
 		$this->assertFalse($this->userOne->doesPasswordMatch("pass1"));
 		$this->assertTrue($this->userOne->doesPasswordMatch($newPass));
 		$dbPwHash = $this->authenticator->db->query(
-			"SELECT pw_hash FROM accounts " .
-			"WHERE id = " . $this->userOne->id)
+			"SELECT pw_hash FROM accounts WHERE id = 1")
 			->fetch_array(MYSQLI_ASSOC)["pw_hash"];
 
 		$this->assertNotEquals($originalHash, $dbPwHash);
@@ -201,4 +200,21 @@ final class AccountActionTest extends TestCase {
 
 	}
 
+	/**
+	 * Tests changing a username
+	 */
+	public function testChangingUsername() {
+		$this->assertFalse($this->userOne->changeUsername("New Name"));
+		$this->assertTrue($this->userOne->login("pass1"));
+		$this->assertTrue($this->userOne->changeUsername("New Name"));
+		$this->assertEquals($this->userOne->username, "New Name");
+
+		$dbName = $this->authenticator->db->query(
+			"SELECT username FROM accounts WHERE id=1")
+			->fetch_array(MYSQLI_ASSOC)["username"];
+
+		$this->assertEquals($this->userOne->username, $dbName);
+		$this->assertFalse($this->userOne->changeUsername("UserTwo"));
+		$this->assertEquals($this->userOne->username, "New Name");
+	}
 }

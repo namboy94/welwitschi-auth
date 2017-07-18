@@ -241,4 +241,33 @@ class User {
 		$this->sessionManager->wipeLoginSession();
 		return $newPass;
 	}
+
+	/**
+	 * Changes the username of a user
+	 * @param string $newUsername: The new username
+	 * @return bool: true if the change went through, false otherwise
+	 */
+	public function changeUsername(string $newUsername) : bool {
+
+		if ($this->isLoggedIn()) {
+
+			$auth = new Authenticator($this->db);
+			if ($auth->getUserFromUsername($newUsername) === null) {
+
+				$stmt = $this->db->prepare(
+					"UPDATE accounts SET username=? WHERE id=?;"
+				);
+				$stmt->bind_param("si", $newUsername, $this->id);
+				$stmt->execute();
+				$this->db->commit();
+				$this->username = $newUsername;
+				return true;
+			} else {
+				return false;
+			}
+
+		} else {
+			return false;
+		}
+	}
 }
