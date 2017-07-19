@@ -1,3 +1,8 @@
+V 1.2.0:
+  - Fixed issue with rest passwords not changing
+  - Fixed issue with changing password
+  - Added username changing functionality
+  - Added email changing functionality
 V 1.1.0:
   - Add method to fetch all users
 V 1.0.1:
