@@ -59,7 +59,9 @@ class Authenticator {
 			"    email VARCHAR(128) NOT NULL," .
 			"    pw_hash VARCHAR(255) NOT NULL," .
 			"    confirmation VARCHAR(255) NOT NULL," .
-			"    PRIMARY KEY(id, username, email));"
+			"    PRIMARY KEY(id)," .
+			"    UNIQUE(username)," .
+			"    UNIQUE(email));"
 		);
 		$this->db->commit();
 	}

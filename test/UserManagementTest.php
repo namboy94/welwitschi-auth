@@ -171,7 +171,7 @@ final class UserManagementTest extends TestCase {
 
 		$users = $this->authenticator->getAllUsers();
 		$this->assertEquals(3, count($users));
-		$this->assertEquals($users[1]->name, "1a");
+		$this->assertEquals($users[1]->username, "1a");
 
 	}
 }

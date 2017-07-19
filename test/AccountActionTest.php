@@ -132,6 +132,8 @@ final class AccountActionTest extends TestCase {
 	 * Also checks that wrong original passwords are rejected
 	 */
 	public function testChangingPassword() {
+		$originalHash = $this->userOne->pwHash;
+
 		$this->assertTrue($this->userOne->login("pass1"));
 
 		// With wrong credentials
@@ -148,17 +150,34 @@ final class AccountActionTest extends TestCase {
 		$this->assertFalse($this->userOne->login("pass1"));
 		$this->assertTrue($this->userOne->login("newpass"));
 		$this->assertTrue($this->userOne->isLoggedIn());
+
+		$dbPwHash = $this->authenticator->db->query(
+			"SELECT pw_hash FROM accounts " .
+			"WHERE id = " . $this->userOne->id)
+			->fetch_array(MYSQLI_ASSOC)["pw_hash"];
+
+		$this->assertNotEquals($originalHash, $dbPwHash);
+		$this->assertEquals($dbPwHash, $this->userOne->pwHash);
 	}
 
 	/**
-	 * Tests resetting a password
+	 * Tests resetting a password while logged in
 	 */
 	public function testResettingPassword() {
+
+		$originalHash = $this->userOne->pwHash;
+
 		$this->assertTrue($this->userOne->login("pass1"));
 		$newPass = $this->userOne->resetPassword();
 		$this->assertFalse($this->userOne->isLoggedIn());
 		$this->assertFalse($this->userOne->doesPasswordMatch("pass1"));
 		$this->assertTrue($this->userOne->doesPasswordMatch($newPass));
+		$dbPwHash = $this->authenticator->db->query(
+			"SELECT pw_hash FROM accounts WHERE id = 1")
+			->fetch_array(MYSQLI_ASSOC)["pw_hash"];
+
+		$this->assertNotEquals($originalHash, $dbPwHash);
+		$this->assertEquals($dbPwHash, $this->userOne->pwHash);
 	}
 
 	/**
@@ -181,4 +200,39 @@ final class AccountActionTest extends TestCase {
 
 	}
 
+	/**
+	 * Tests changing a username
+	 */
+	public function testChangingUsername() {
+		$this->assertFalse($this->userOne->changeUsername("New Name"));
+		$this->assertTrue($this->userOne->login("pass1"));
+		$this->assertTrue($this->userOne->changeUsername("New Name"));
+		$this->assertEquals($this->userOne->username, "New Name");
+
+		$dbName = $this->authenticator->db->query(
+			"SELECT username FROM accounts WHERE id=1")
+			->fetch_array(MYSQLI_ASSOC)["username"];
+
+		$this->assertEquals($this->userOne->username, $dbName);
+		$this->assertFalse($this->userOne->changeUsername("UserTwo"));
+		$this->assertEquals($this->userOne->username, "New Name");
+	}
+
+	/**
+	 * Tests changing a username
+	 */
+	public function testChangingEmail() {
+		$this->assertFalse($this->userOne->changeEmail("new@about.com"));
+		$this->assertTrue($this->userOne->login("pass1"));
+		$this->assertTrue($this->userOne->changeEmail("new@about.com"));
+		$this->assertEquals($this->userOne->email, "new@about.com");
+
+		$dbEmail = $this->authenticator->db->query(
+			"SELECT email FROM accounts WHERE id=1")
+			->fetch_array(MYSQLI_ASSOC)["email"];
+
+		$this->assertEquals($this->userOne->email, $dbEmail);
+		$this->assertFalse($this->userOne->changeEmail("user@2.net"));
+		$this->assertEquals($this->userOne->email, "new@about.com");
+	}
 }

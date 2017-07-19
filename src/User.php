@@ -210,7 +210,7 @@ class User {
 			$stmt = $this->db->prepare(
 				"UPDATE accounts SET pw_hash=? WHERE id=?;"
 			);
-			$stmt->bind_param("is", $hash, $this->id);
+			$stmt->bind_param("si", $hash, $this->id);
 			$stmt->execute();
 			$this->db->commit();
 			$this->pwHash = $hash;
@@ -233,12 +233,70 @@ class User {
 		$stmt = $this->db->prepare(
 			"UPDATE accounts SET pw_hash=? WHERE id=?;"
 		);
-		$stmt->bind_param("si", $newHash, $this->username);
+		$stmt->bind_param("si", $newHash, $this->id);
 		$stmt->execute();
 		$this->db->commit();
 		$this->pwHash = $newHash;
 
 		$this->sessionManager->wipeLoginSession();
 		return $newPass;
+	}
+
+	/**
+	 * Changes the username of a user
+	 * @param string $newUsername: The new username
+	 * @return bool: true if the change went through, false otherwise
+	 */
+	public function changeUsername(string $newUsername) : bool {
+
+		if ($this->isLoggedIn()) {
+
+			$auth = new Authenticator($this->db);
+			if ($auth->getUserFromUsername($newUsername) === null) {
+
+				$stmt = $this->db->prepare(
+					"UPDATE accounts SET username=? WHERE id=?;"
+				);
+				$stmt->bind_param("si", $newUsername, $this->id);
+				$stmt->execute();
+				$this->db->commit();
+				$this->username = $newUsername;
+				return true;
+			} else {
+				return false;
+			}
+
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Changes the email address of a user
+	 * @param string $newEmail: The new email address
+	 * @return bool: true if the change went through, false otherwise
+	 */
+	public function changeEmail(string $newEmail) : bool {
+
+		if ($this->isLoggedIn()) {
+
+			$auth = new Authenticator($this->db);
+			if ($auth->getUserFromEmailAddress($newEmail) === null) {
+
+				$stmt = $this->db->prepare(
+					"UPDATE accounts SET email=? WHERE id=?;"
+				);
+				$stmt->bind_param("si", $newEmail, $this->id);
+				$stmt->execute();
+				$this->db->commit();
+				$this->email = $newEmail;
+				return true;
+			} else {
+				return false;
+			}
+
+		} else {
+			return false;
+		}
 	}
 }
