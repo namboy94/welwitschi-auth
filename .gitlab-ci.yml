@@ -35,7 +35,7 @@ unittest:
     - echo $TEST_DB_PASS > DB_PASS.secret
     - composer update
     - ./unittest.sh
-    - rsync -av coverage/ /var/www/coverage.namibsun.net/public_html/welwitschi-auth --delete-before
+    - rsync -av coverage/ /var/www/progstats.namibsun.net/public/coverage/welwitschi-auth --delete-before
     - rm DB_PASS.secret
 
 upload_release_to_github:
