@@ -19,7 +19,7 @@ github_mirror:
 lint:
   stage: test
   tags:
-    - php
+    - php-7.1
     - composer
   script:
     - composer update
@@ -29,8 +29,8 @@ unittest:
   stage: test
   tags:
     - composer
-    - php
-    - coverage
+    - php-7.1
+    - progstats
   script:
     - echo $TEST_DB_PASS > DB_PASS.secret
     - composer update
