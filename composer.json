@@ -4,7 +4,7 @@
   "description": "Authentication Library for PHP 7.1+",
   "keywords": ["auth", "authentication"],
   "homepage": "https://gitlab.namibsun.net/namboy94/welwitschi-auth",
-  "license": "GPLv3",
+  "license": "GPL-3.0-or-later",
   "authors": [
     {
       "name": "Hermann Krumrey",
