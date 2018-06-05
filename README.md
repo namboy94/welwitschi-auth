@@ -2,7 +2,7 @@
 
 |master|develop|
 |:----:|:-----:|
-|[![build status](https://gitlab.namibsun.net/namboy94/welwitschi-auth/badges/master/build.svg)](https://gitlab.namibsun.net/namboy94/welwitschi-auth/commits/master)|[![build status](https://gitlab.namibsun.net/namboy94/welwitschi-auth/badges/develop/build.svg)](https://gitlab.namibsun.net/namboy94/welwitschi-auth/commits/develop)|
+|[![build status](https://gitlab.namibsun.net/namibsun/php/welwitschi-auth/badges/master/build.svg)](https://gitlab.namibsun.net/namibsun/php/welwitschi-auth/commits/master)|[![build status](https://gitlab.namibsun.net/namibsun/php/welwitschi-auth/badges/develop/build.svg)](https://gitlab.namibsun.net/namibsun/php/welwitschi-auth/commits/develop)|
 
 ![Logo](resources/logo/logo.png)
 
@@ -49,11 +49,9 @@ Documentation can be found in [doc](doc/).
 
 ## Further Information
 
-* [Changelog](https://gitlab.namibsun.net/namboy94/welwitschi-auth/raw/master/CHANGELOG)
-* [License (GPLv3)](https://gitlab.namibsun.net/namboy94/welwitschi-auth/raw/master/LICENSE)
-* [Gitlab](https://gitlab.namibsun.net/namboy94/welwitschi-auth)
+* [Changelog](CHANGELOG)
+* [License (GPLv3)](LICENSE)
+* [Gitlab](https://gitlab.namibsun.net/namibsun/php/welwitschi-auth)
 * [Github](https://github.com/namboy94/welwitschi-auth)
-* [Git Statistics (gitstats)](https://gitstats.namibsun.net/gitstats/welwitschi-auth/index.html)
-* [Git Statistics (git_stats)](https://gitstats.namibsun.net/git_stats/welwitschi-auth/index.html)
-* [Test Coverage](https://coverage.namibsun.net/welwitschi-auth/index.html)
+* [Progstats](https://progstats.namibsun.net/projects/welwitschi-auth)
 * [Packagist Page](https://packagist.org/packages/namboy94/welwitschi-auth)
